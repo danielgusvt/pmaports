@@ -1,0 +1,24 @@
+# Contributor: Daniel Vásquez <danielgusvt@gmail.com> (CHANGEME!)
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-motorola-payton"
+pkgdesc="Motorola Moto x4"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-motorola-payton mkbootimg mesa-dri-swrast"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="3620cf96241ddb18f7174592407bc1b6d8ce0e090c9e7eccf0a0b2eeb721c3d0c653e3f044e3601223d32f0f936085d2b7ed9975803ccb669fd3733351ffeb3c  deviceinfo"

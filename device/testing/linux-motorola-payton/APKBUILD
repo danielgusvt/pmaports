@@ -1,0 +1,54 @@
+# Contributor: Daniel Vásquez <danielgusvt@gmail.com> (CHANGEME!)
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/(CHANGEME!)
+
+pkgname="linux-motorola-payton"
+pkgver=4.4.x
+pkgrel=0
+pkgdesc="Motorola Moto x4 kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="motorola-payton"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps"
+makedepends="bash bc bison devicepkg-dev flex openssl-dev perl gcc6"
+
+# Compiler: this kernel was only tested with GCC6. Feel free to make a merge
+# request if you find out that it is booting working with newer GCCs as
+# well. See <https://postmarketos.org/vendorkernel> for instructions.
+if [ "${CC:0:5}" != "gcc6-" ]; then
+	CC="gcc6-$CC"
+	HOSTCC="gcc6-gcc"
+	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
+fi
+
+# Source
+_repository="android_kernel_motorola_msm8998"
+_commit="9b66f1242940ad46853a3ff927a4fade9d8b7bef"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/danielgusvt/$_repository/archive/$_commit.tar.gz
+	$_config
+	init-initramfs-disable-do_skip_initramfs.patch
+"
+builddir="$srcdir/$_repository-$_commit"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor"
+}
+
+sha512sums="1afe21c9863ba2e61e7814ed61b49386dfcdd7242c58827ed302e1562971b9c90215d8cd974257760ac8a6d4269cff1fbeea189938ebbf0a5d9f854c91eb6ad8  linux-motorola-payton-9b66f1242940ad46853a3ff927a4fade9d8b7bef.tar.gz
+723499c4db4c1836d3254401ffefb86b24a70c14b9a48407b8aa03de4dd18f9cfd93dc7012a90bf10085ae331f1f83f54bc75b6ea274f4a08074401a94adce2b  config-motorola-payton.aarch64
+0f536e5acd0f5e6d6774918d8e226ae1f4edc486596fc5c93a110b4eb2555e0f1281f460065928a7f7a272b886f61f7967fe60cc4952ed1f4b37143bd2a28962  init-initramfs-disable-do_skip_initramfs.patch"
