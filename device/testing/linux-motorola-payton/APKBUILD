@@ -2,7 +2,7 @@
 # Kernel config based on: arch/arm64/configs/lineageos_payton_defconfig
 
 pkgname=linux-motorola-payton
-pkgver=4.4.219
+pkgver=4.9.206
 pkgrel=1
 pkgdesc="Motorola Moto X4 kernel fork"
 arch="aarch64"
@@ -15,10 +15,10 @@ makedepends="bash bc bison devicepkg-dev flex openssl-dev perl"
 
 # Source
 _repository="android_kernel_motorola_msm8998"
-_commit="ce9ea8f125c7302ae9b2fec84f23a69271e957c3"
+_commit="c1d0fa05e0c77160d26824c88f156e6720ac6ec5"
 _config="config-$_flavor.$arch"
 source="
-	$pkgname-$_commit.tar.gz::https://github.com/LineageOS/$_repository/archive/$_commit.tar.gz
+	$pkgname-$_commit.tar.gz::https://github.com/danielgusvt/$_repository/archive/$_commit.tar.gz
 	$_config
 	fix-virtual-terminal.patch
 	remove_bootloader_cmdline_opts.patch
